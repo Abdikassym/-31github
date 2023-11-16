@@ -22,7 +22,7 @@ dealer_cards = []
 
 def show_cards():
     print(f"This is your cards {player_cards} and total score is {calculate_total(player_cards)}")
-    print(f"This is one of dealer's card {dealer_cards[0]}, {dealer_cards}")
+    print(f"This is one of dealer's card {dealer_cards[0]}")
 
 
 def calculate_total(cards_to_calculate):
@@ -35,15 +35,7 @@ def calculate_total(cards_to_calculate):
 def draw_a_card(deck):
     random_card = random.choice(cards)
     deck.append(random_card)
-# start of the game
-
-
-print(logo)
-print("Welcome to blackjack!")
-for start_card in range(2):
-    draw_a_card(player_cards)
-    draw_a_card(dealer_cards)
-show_cards()
+    return deck
 
 
 def player_score():
@@ -54,24 +46,59 @@ def dealer_score():
     return calculate_total(dealer_cards)
 
 
-stand_or_hit = input("Would you like to hit another card (y) or stand? (n): ")
-if stand_or_hit == "y":
-    draw_a_card(player_cards)
-    player_score()
-    show_cards()
-else:
-    print(f"Your total score is {player_score()}")
-    while dealer_score() < 18:
-        print(f"dealer's cards score before one cycle {dealer_score()}")
-        draw_a_card(dealer_cards)
-        print(f"dealers cards in cycle {dealer_cards}")
-        dealer_score()
-        print(f"TEST {dealer_cards}")
-        if dealer_score() > 21 and 11 in dealer_cards:
-            dealer_cards = sorted(dealer_cards)
-            dealer_cards[-1] = 1
-            print(dealer_cards)
-            print(f"dealer's score after the whole cycle {dealer_score()}")
+def switch_ace_to_1(deck):
+    deck = sorted(deck)
+    deck[-1] = 1
+    print(deck)
+    return deck
 
-print(f"your total card score is {player_score()}")
-print(f"dealer's total card score is {dealer_score()}")
+
+# start of the game
+game_is_on = True
+
+while game_is_on:
+    print(logo)
+    print("Welcome to blackjack!")
+    for start_card in range(2):
+        draw_a_card(player_cards)
+        draw_a_card(dealer_cards)
+    show_cards()
+
+    keep_thinking = True
+    while keep_thinking:
+        stand_or_hit = input("Would you like to hit another card (y) or stand? (n): ")
+        if stand_or_hit == "y":
+            player_cards = draw_a_card(player_cards)
+            player_score()
+            show_cards()
+        else:
+            keep_thinking = False
+    while dealer_score() < 18:
+        draw_a_card(dealer_cards)
+        dealer_score()
+        if dealer_score() > 21 and 11 in dealer_cards:
+            dealer_cards = switch_ace_to_1(dealer_cards)
+    player_points = 21 - player_score()
+    dealer_points = 21 - dealer_score()
+    if player_score() > 21 and dealer_score() > 21:
+        print("DRAW!")
+    elif player_score() <= 21 < dealer_score():
+        print("Player won!")
+    elif dealer_score() <= 21 < player_score():
+        print("Dealer won!")
+    elif player_score() == dealer_score():
+        print("DRAW!")
+    elif player_points < dealer_points:
+        print("Player won!")
+    else:
+        print("Dealer won!")
+
+    print(f"your total card score is {player_score()}")
+    print(f"dealer's cards are {dealer_cards} and total score is {dealer_score()}")
+
+    restart = input("\nWould you like to restart a game? y/n ")
+    if restart == "n":
+        game_is_on = False
+    else:
+        dealer_cards = []
+        player_cards = []
