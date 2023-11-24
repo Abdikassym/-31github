@@ -1,25 +1,22 @@
 from turtle import Turtle, Screen
+from random import choice
 
 timmy = Turtle()
 screen = Screen()
 
-angle = 4
+colors = ["yellow", 'red', 'blue', 'coral', 'cyan', 'green', 'purple', 'pink', 'orange', 'black']
 
 
-def draw_shape(angles):
-    corner = 360 // angles
-    for i in range(angles):
+def draw_shape(number_of_turns):
+    color = choice(colors)
+    timmy.color(color)
+    angle = 360 / number_of_turns
+    for _ in range(number_of_turns):
         timmy.forward(100)
-        timmy.right(corner)
-    global angle
-    angle += 1
-    draw_shape(angle)
+        timmy.right(angle)
 
 
-draw_shape(angle)
+for f in range(3, 10):
+    draw_shape(f)
 
 
-
-
-
-screen.exitonclick()
