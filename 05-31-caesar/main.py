@@ -1,7 +1,6 @@
 def encrypt(text,s):
     result = ""
  
-    # traverse text
     for i in range(len(text)):
         char = text[i]
  
@@ -15,7 +14,6 @@ def encrypt(text,s):
  
     return result
  
-#check the above function
 text = "ATTACKATONCE"
 s = 4
 print ("Text  : " + text)
